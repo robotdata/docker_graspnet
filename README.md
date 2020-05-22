@@ -11,7 +11,7 @@ The code is in the folder of /pytorch_implementation
 * Run `xhost +local:root` on the host computer to enable using GUI with docker.
   http://wiki.ros.org/docker/Tutorials/GUI
 * `docker pull registry.gitlab.com/haiandaidi/docker_graspnet:2020_05_05`
-* `docker run --gpus all -it --env="DISPLAY" -v /tmp/.X11-unix:/tmp/.X11-unix:rw -w /pytorch_implementation/pytorch_6dof-graspne registry.gitlab.com/teamhai/docker_collection /bin/bash`
+* `docker run --gpus all -it --env="DISPLAY" -v /tmp/.X11-unix:/tmp/.X11-unix:rw -w /pytorch_implementation/pytorch_6dof-graspnet registry.gitlab.com/haiandaidi/docker_graspnet:2020_05_05 /bin/bash`
 * To run the demo:
   `python3 -m demo.main`
 * Per default, the demo script runs the GAN sampler with sampling based refinement. To use the VAE sampler and/or gradient refinement run:
