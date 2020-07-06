@@ -32,4 +32,6 @@ The code is in the folder of graspnet_ws/src/graspnet/pytorch_6dof-graspnet
   This is pointcloud of the object to be grasped.
 * output topic: 'generated_grasp_pose', Pose <br />
   This is the generated grasp pose. Only the first pose of the generated poses is published.
+
+
 These parameters can be changed in `script_dev/generate_grasp_pose.py`
