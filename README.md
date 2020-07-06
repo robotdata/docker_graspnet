@@ -14,7 +14,7 @@ The code is in the folder of graspnet_ws/src/graspnet/pytorch_6dof-graspnet
 * `git pull https://gitlab.com/haiandaidi/docker_graspnet.git`
 * `docker run --gpus all -it --network=host --env="DISPLAY" -v /tmp/.X11-unix:/tmp/.X11-unix:rw -v $PWD/graspnet_ws:/graspnet_ws:rw -w /graspnet_ws registry.gitlab.com/haiandaidi/docker_graspnet:2020_07_03_ros`
 * To run the demo:
-  `cd /graspnet_ws/src/graspnet/pytorch_6dof-graspnet'
+  `cd /graspnet_ws/src/graspnet/pytorch_6dof-graspnet`
   `python3 -m demo.main`
 * Per default, the demo script runs the GAN sampler with sampling based refinement. To use the VAE sampler and/or gradient refinement run:
   `python3 -m demo.main --grasp_sampler_folder checkpoints/vae_pretrained/ --refinement_method gradient`
@@ -28,8 +28,8 @@ The code is in the folder of graspnet_ws/src/graspnet/pytorch_6dof-graspnet
 * `source devel/setup.bash`
 * `rosrun graspnet generate_grasp_pose.py`
 
-* input topic: 'object_pc', PointCloud2
+* input topic: 'object_pc', PointCloud2 <br />
   This is pointcloud of the object to be grasped.
-* output topic: 'generated_grasp_pose', Pose
+* output topic: 'generated_grasp_pose', Pose <br />
   This is the generated grasp pose. Only the first pose of the generated poses is published.
 These parameters can be changed in `script_dev/generate_grasp_pose.py`
