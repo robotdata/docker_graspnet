@@ -26,7 +26,7 @@ The code is in the folder of graspnet_ws/src/graspnet/pytorch_6dof-graspnet
 * `cd /graspnet_ws`
 * `catkin_make`
 * `source devel/setup.bash`
-* `rosrun graspnet generate_grasp_posearray.py`
+* `rosrun graspnet generate_grasp_poses.py`
 
 * input topic: 'object_pc', PointCloud2 <br />
   This is pointcloud of the object to be grasped.
