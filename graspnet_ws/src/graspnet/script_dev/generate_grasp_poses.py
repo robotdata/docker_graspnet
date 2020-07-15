@@ -3,13 +3,16 @@
 Subscribe to a PointCloud2 topic named 'object_pc'.
 This is the object information.
 Then the GraspNet functions are called to generate the grasp poses.
-The first pose is published to a Pose topic named generated_grasp_pose.
+All the generated poses are published to a PoseArray topic named generated_grasp_posearray.
 Yongming Qin
 2020/07/03
+2020/07/15: Modify type of object_pc. Instad of publishing the first pose, the node publish
+    all the poses.
 """
 
 import rospy
-from geometry_msgs.msg import Pose
+from std_msgs.msg import Header
+from geometry_msgs.msg import Pose, PoseArray
 from sensor_msgs.msg import PointCloud2
 
 import os
@@ -19,6 +22,7 @@ os.chdir("/graspnet_ws/src/graspnet/pytorch_6dof-graspnet")
 sys.path.append("/graspnet_ws/src/graspnet/pytorch_6dof-graspnet")
 
 import numpy as np
+import ros_numpy
 from scipy.spatial.transform import Rotation as R
 import argparse
 import glob
@@ -69,27 +73,36 @@ estimator = grasp_estimator.GraspEstimator(grasp_sampler_args, grasp_evaluator_a
 
 def callback(msg):
     object_pc = ros_numpy.numpify(msg)
+    object_pc = np.concatenate( (object_pc['x'].reshape(-1,1), object_pc['y'].reshape(-1,1), object_pc['z'].reshape(-1,1)), axis=1)
     generated_grasps, generated_scores = estimator.generate_and_refine_grasps(object_pc) # two lists
     if len(generated_grasps) > 0:
-        grasp_pose.position.x = generated_grasps[0][0,3]
-        grasp_pose.position.y = generated_grasps[0][1,3]
-        grasp_pose.position.z = generated_grasps[0][2,3]
-        rotation_matrix = [[generated_grasps[0][0,0], generated_grasps[0][0,1], generated_grasps[0][0,2]],
-                           [generated_grasps[0][1,0], generated_grasps[0][1,1], generated_grasps[0][1,2]],
-                           [generated_grasps[0][2,0], generated_grasps[0][2,1], generated_grasps[0][2,2]]]
-        r = R.from_matrix(rotation_matrix)
-        quat = r.as_quat()
-        grasp_pose.prientation.x = quat[0]
-        grasp_pose.prientation.y = quat[1]
-        grasp_pose.prientation.z = quat[2]
-        grasp_pose.prientation.w = quat[3]
-        pub.publish(grasp_pose)
+        grasp_posearray = PoseArray()
+        header = Header()
+        header.stamp = rospy.get_rostime()
+        # header.frame =
+        grasp_posearray.header = header
+        for grasp in generated_grasps:
+            grasp_pose.position.x = grasp[0,3]
+            grasp_pose.position.y = grasp[1,3]
+            grasp_pose.position.z = grasp[2,3]
+            rotation_matrix = [[grasp[0,0], grasp[0,1], grasp[0,2]],
+                            [grasp[1,0], grasp[1,1], grasp[1,2]],
+                            [grasp[2,0], grasp[2,1], grasp[2,2]]]
+            r = R.from_matrix(rotation_matrix)
+            quat = r.as_quat()
+            grasp_pose.orientation.x = quat[0]
+            grasp_pose.orientation.y = quat[1]
+            grasp_pose.orientation.z = quat[2]
+            grasp_pose.orientation.w = quat[3]
+
+            grasp_posearray.poses.append(grasp_pose)
+        pub.publish(grasp_posearray)
 
 
 
 if __name__ == '__main__':
-    rospy.init_node('grasp_generator', anonymous=True)
-    pub = rospy.Publisher('generated_grasp_pose', Pose, queue_size=1)
+    rospy.init_node('generator_grasp', anonymous=True)
+    pub = rospy.Publisher('generated_grasp_posearray', PoseArray, queue_size=1)
     rospy.Subscriber('object_pc', PointCloud2, callback)
     while not rospy.is_shutdown():
         print("Subscribing...")
