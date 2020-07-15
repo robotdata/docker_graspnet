@@ -34,4 +34,4 @@ The code is in the folder of graspnet_ws/src/graspnet/pytorch_6dof-graspnet
   This include all the generated grasp poses.
 
 
-These parameters can be changed in `script_dev/generate_grasp_pose.py`
+These parameters can be changed in `script_dev/generate_grasp_poses.py`
