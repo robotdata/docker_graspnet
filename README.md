@@ -26,12 +26,12 @@ The code is in the folder of graspnet_ws/src/graspnet/pytorch_6dof-graspnet
 * `cd /graspnet_ws`
 * `catkin_make`
 * `source devel/setup.bash`
-* `rosrun graspnet generate_grasp_pose.py`
+* `rosrun graspnet generate_grasp_posearray.py`
 
 * input topic: 'object_pc', PointCloud2 <br />
   This is pointcloud of the object to be grasped.
-* output topic: 'generated_grasp_pose', Pose <br />
-  This is the generated grasp pose. Only the first pose of the generated poses is published.
+* output topic: 'generated_grasp_posearray', PoseArray <br />
+  This include all the generated grasp poses.
 
 
 These parameters can be changed in `script_dev/generate_grasp_pose.py`
