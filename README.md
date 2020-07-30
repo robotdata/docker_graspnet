@@ -1,7 +1,8 @@
 # docker_graspnet
 
 A docker image of the GraspNet method.
-ROS wrapper is added.
+ROS wrapper is added.<br/>
+Tested with Ubuntu 18.04 with docker, nvidia-docker, ROS installed.
 
 ## GraspNet
 This docker image contain the code and the running environment of https://github.com/jsll/pytorch_6dof-graspnet
